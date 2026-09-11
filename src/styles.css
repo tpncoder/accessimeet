@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap'); 
+
+@import "tailwindcss";
+@import "@heroui/styles";
+
+* {
+  box-sizing: border-box;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+  background-color: #f4f0ea; 
+  color: #000000;
+}
+
+body {
+  margin: 0;
+}
+
+/* Base element overrides */
+.button, .card, .input {
+  border-radius: 0px !important;
+  border: 2.5px solid #000000 !important;
+  box-shadow: 4px 4px 0px 0px #000000;
+  transition: all 0.1s ease-in-out;
+}
+
+.button:hover {
+  box-shadow: 6px 6px 0px 0px #000000;
+  transform: translate(-2px, -2px);
+}
+
+.button:active {
+  box-shadow: 0px 0px 0px 0px #000000;
+  transform: translate(4px, 4px);
+}
+
+.input:focus, .input:focus-within {
+  outline: none !important;
+  background-color: #ffffdd !important;
+  box-shadow: 5px 5px 0px 0px #000000 !important;
+}
+
+/* Tailwind v4 Utility Definitions */
+@utility brutal-card {
+  background-color: #ffffff;
+  border-radius: 0px !important;
+  border: 2.5px solid #000000 !important;
+  box-shadow: 4px 4px 0px 0px #000000;
+  transition: all 0.1s ease-in-out;
+}
+
+@utility brutal-btn {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: #000000;
+  border-radius: 0px !important;
+  border: 2.5px solid #000000 !important;
+  box-shadow: 3px 3px 0px 0px #000000;
+  transition: all 0.1s ease-in-out;
+
+  &:active {
+    box-shadow: 0px 0px 0px 0px #000000;
+    transform: translate(3px, 3px);
+  }
+}
+
+@utility brutal-btn-primary {
+  background-color: #00FFCC !important;
+  &:hover {
+    background-color: #00e6b8 !important;
+  }
+}
+
+@utility brutal-btn-danger {
+  background-color: #FF6B6B !important;
+  &:hover {
+    background-color: #ff5252 !important;
+  }
+}
+
+@utility brutal-btn-success {
+  background-color: #86efac !important;
+}
+
+@utility brutal-btn-muted {
+  background-color: #f87171 !important;
+}
+
+@utility brutal-badge {
+  background-color: #00FFCC;
+  padding: 0.125rem 0.5rem;
+  border: 2px solid #000000;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 1.125rem;
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+@utility brutal-caption {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #00FFCC;
+  border: 2.5px solid #00FFCC;
+  padding: 0.75rem;
+  font-family: monospace;
+  font-weight: 700;
+  text-align: center;
+  font-size: 1.125rem;
+  box-shadow: 4px 4px 0px 0px #00FFCC;
+}
