@@ -71,6 +71,7 @@ body {
 
 @utility brutal-btn-primary {
   background-color: #00FFCC !important;
+  color: black; 
   &:hover {
     background-color: #00e6b8 !important;
   }
@@ -85,6 +86,7 @@ body {
 
 @utility brutal-btn-success {
   background-color: #86efac !important;
+    color: black; 
 }
 
 @utility brutal-btn-muted {
