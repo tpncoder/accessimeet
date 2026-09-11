@@ -12,8 +12,10 @@ AccessiMeet is an accessibility-focused meeting platform designed to make online
 - Designed with accessibility best practices in mind
 
 ## Future Roadmap
-- Context-Aware Translation: Plan to integrate an LLM buffer to smooth out finger-spelling (e.g., detecting 'W-A-T-E-R' as 'Water' instead of individual letters).
-- Non-Manual Markers: ASL requires facial expressions for grammar. We plan to add MediaPipe Face Mesh to detect eyebrow raises for Yes/No questions.
+- Integrate an LLM buffer to smooth out finger-spelling (e.g., detecting 'W-A-T-E-R' as 'Water' instead of individual letters).
+- Add MediaPipe Face Mesh to detect eyebrow raises for Yes/No questions.
+- Frequent contacts and contact based dialing
+- Platform to learn ASL
 
 ## Getting started
 

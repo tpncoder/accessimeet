@@ -7,7 +7,7 @@ import { useTranscript } from '#/hooks/useTranscript'
 import { useSpeechToText } from '#/hooks/useSpeechToText'
 import { useAslTranslator } from '#/hooks/useAslTranslator'
 import { useCaptionManager } from '#/hooks/useCaptionManager'
-import { TranscriptPanel, type TranscriptEntry } from '#/components/room/TranscriptPanel'
+import { TranscriptPanel } from '#/components/room/TranscriptPanel'
 import { RoomHeader } from '#/components/room/RoomHeader'
 import { VideoGrid } from '#/components/room/VideoGrid'
 import { ControlBar } from '#/components/room/ControlBar'
@@ -27,19 +27,25 @@ function RoomComponent() {
   const { room: roomId } = Route.useParams()
   const { isHost } = Route.useSearch()
   
-  const { localId, peer, call, localStream, remoteStream, isConnected, sendCaptionData, incomingCaption } = usePeer(isHost ? roomId : undefined)
+  const { 
+    localId, peer, call, localStream, remoteStream, isConnected, 
+    sendCaptionData, sendInterrupt, incomingCaption 
+  } = usePeer(isHost ? roomId : undefined)
+  
   const session = useRoomSession(localStream, remoteStream)
   const { transcript, addToTranscript, exportTranscript } = useTranscript()
   
-  const { localCaption: sttCaption, setLocalCaption: setSttCaption } = useSpeechToText(session.userMode, sendCaptionData, addToTranscript)
-  const { localCaption: aslCaption, setLocalCaption: setAslCaption, handleFrameLandmarks } = useAslTranslator(session.userMode, sendCaptionData, addToTranscript)
+  const { localCaption: sttCaption } = useSpeechToText(session.userMode, sendCaptionData, addToTranscript)
+  const { localCaption: aslCaption, handleFrameLandmarks } = useAslTranslator(session.userMode, sendCaptionData, addToTranscript)
 
   const activeLocalCaption = session.userMode === 'hearing' ? sttCaption : aslCaption
   const displayCaption = useCaptionManager(session.userMode, activeLocalCaption, incomingCaption)
 
   const [hasCalledHost, setHasCalledHost] = useState(false)
   const [showTranscriptPanel, setShowTranscriptPanel] = useState(false)
+  const [showInterrupt, setShowInterrupt] = useState(false)
 
+  // Auto-Mute Logic
   useEffect(() => {
     if (session.userMode === 'deaf' && !session.isAudioMuted) {
       session.toggleAudio()
@@ -48,6 +54,7 @@ function RoomComponent() {
     }
   }, [session.userMode, session.isAudioMuted, session.toggleAudio])
 
+  // Call remote peer
   useEffect(() => {
     if (!isHost && peer && localStream && localId && !hasCalledHost) {
       call(roomId)
@@ -55,16 +62,20 @@ function RoomComponent() {
     }
   }, [isHost, peer, localStream, localId, roomId, call, hasCalledHost])
 
-  const lastRemoteAslRef = useState<number>(0)[0];
-
+  // Handle Incoming Data (Captions AND Interrupts)
   useEffect(() => {
     if (incomingCaption) {
+      if (incomingCaption.type === 'interrupt') {
+        setShowInterrupt(true)
+        setTimeout(() => setShowInterrupt(false), 5000)
+        return 
+      }
+
       const age = Date.now() - incomingCaption.timestamp
       if (age < 15000) {
         if (incomingCaption.type === 'speech') {
           addToTranscript(incomingCaption.text, 'speech', false)
         } else if (incomingCaption.type === 'asl') {
-          const now = Date.now()
           addToTranscript(`Remote signed: ${incomingCaption.text.replace('You signed: ', '')}`, 'asl', false)
         }
       }
@@ -82,6 +93,17 @@ function RoomComponent() {
 
   return (
     <div className="p-4 md:p-8 flex flex-col items-center gap-6 w-full max-w-6xl mx-auto font-sans relative">
+      
+      {/* Interrupt Overlay */}
+      {showInterrupt && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#FFE66D] border-8 border-black animate-pulse pointer-events-none">
+          <div className="text-center p-8 bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <h1 className="text-6xl font-black mb-4 text-black">✋ ATTENTION</h1>
+            <p className="text-3xl font-bold text-black">Your partner wants to speak!</p>
+          </div>
+        </div>
+      )}
+
       <RoomHeader
         roomId={roomId}
         isHost={isHost}
@@ -102,6 +124,7 @@ function RoomComponent() {
           captionText={displayCaption}
         />
 
+        {/* Caption Bar */}
         {displayCaption && (
           <div className="mt-4 w-full max-w-2xl relative">
             <div className="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-sm overflow-hidden">
@@ -136,11 +159,37 @@ function RoomComponent() {
           </div>
         )}
 
+        {/* SINGLE SET OF CONTROLS */}
+        <div className="mt-4 flex gap-3 flex-wrap justify-center">
+          <button 
+            onClick={() => setShowTranscriptPanel(!showTranscriptPanel)}
+            className="bg-[#FFE66D] border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all flex items-center gap-2"
+          >
+            {showTranscriptPanel ? 'Hide Transcript' : 'Show Transcript'} ({transcript.length})
+          </button>
+          
+          <button 
+            onClick={exportTranscript}
+            disabled={transcript.length === 0}
+            className="bg-[#4ECDC4] border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all flex items-center gap-2 disabled:opacity-50"
+          >
+            Export TXT
+          </button>
+
+          {session.userMode === 'deaf' && (
+            <button 
+              onClick={sendInterrupt} 
+              className="bg-[#FF6B6B] border-4 border-black px-6 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all flex items-center gap-2 text-white"
+            >
+              ✋ Raise Hand
+            </button>
+          )}
+        </div>
+
+        {/* Transcript Panel (No buttons inside) */}
         <TranscriptPanel 
           transcript={transcript}
           showPanel={showTranscriptPanel}
-          onToggle={() => setShowTranscriptPanel(!showTranscriptPanel)}
-          onExport={exportTranscript}
         />
         
         {!isLandmarkerReady && session.userMode === 'deaf' && (
