@@ -121,7 +121,6 @@ function RoomComponent() {
           remoteVideoRef={session.remoteVideoRef}
           canvasRef={canvasRef}
           remoteStream={remoteStream}
-          captionText={displayCaption}
         />
 
         {/* Caption Bar */}
