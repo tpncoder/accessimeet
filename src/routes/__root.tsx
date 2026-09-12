@@ -2,6 +2,7 @@ import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import { Navbar } from '#/components/Navbar'
 import { supabase } from '#/utils/supabase'
 import { useAuth } from '#/hooks/useAuth'
+import { Analytics } from "@vercel/analytics/react"
 
 import '../styles.css'
 
@@ -19,14 +20,13 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootComponent,
 })
 
-// __root.tsx
 function RootComponent() {
   const { isAuthenticated: initialAuth } = Route.useRouteContext()
   const isLoggedIn = useAuth(initialAuth)
-  
+
   return (
     <>
-      {/* Changed overflow-y-auto to overflow-hidden */}
+      <Analytics />
       <div className="w-[125%] h-[125vh] scale-80 transform origin-top-left overflow-hidden">
         <Navbar isLoggedIn={isLoggedIn} />
         <Outlet />
