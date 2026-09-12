@@ -27,7 +27,7 @@ function RootComponent() {
   return (
     <>
       <Analytics />
-      <div className="w-[125%] h-[125vh] scale-80 transform origin-top-left overflow-hidden">
+      <div className="w-[125%] h-[125vh] scale-80 transform origin-top-left overflow-y-auto md:overflow-hidden">
         <Navbar isLoggedIn={isLoggedIn} />
         <Outlet />
       </div>
