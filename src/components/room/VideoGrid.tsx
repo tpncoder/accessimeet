@@ -8,7 +8,7 @@ interface VideoGridProps {
   remoteVideoRef: React.RefObject<HTMLVideoElement | null>
   canvasRef: React.RefObject<HTMLCanvasElement | null>
   remoteStream: MediaStream | null
-  captionText: string
+  captionText?: string
 }
 
 export function VideoGrid({

@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Button, Card, Input, TextField, Label } from '@heroui/react'
 import { useState } from 'react'
-
 import { supabase } from '#/utils/supabase'
 
 export const Route = createFileRoute('/onboarding')({
@@ -17,12 +16,11 @@ function Onboarding() {
 
   const completeOnboarding = async () => {
     if (!fullName.trim()) return
-
+    
     setLoading(true)
     setError(null)
-
+    
     const { data: { user } } = await supabase.auth.getUser()
-
     if (!user) {
       setError('User session not found. Please sign in again.')
       setLoading(false)
@@ -48,21 +46,23 @@ function Onboarding() {
   }
 
   return (
-    <div className="p-4 flex justify-center items-center min-h-full w-screen">
+    <div className="p-4 flex flex-col justify-center items-center min-h-screen w-full gap-6">
       <Card className="max-w-md w-full brutal-card">
-        <Card.Header className="font-bold text-xl uppercase">Complete Your Profile</Card.Header>
+        <Card.Header className="font-bold text-xl uppercase">
+          Complete Your Profile
+        </Card.Header>
         <Card.Content className="flex flex-col gap-6">
           {error && (
             <div className="p-2 border-2 border-black bg-red-100 font-bold text-xs">
               {error}
             </div>
           )}
-
+          
           <TextField isRequired onChange={setFullName} value={fullName}>
             <Label className="font-bold">Full Name</Label>
             <Input placeholder="Enter your name" />
           </TextField>
-
+          
           <div className="flex flex-col gap-2">
             <Label className="font-bold">Primary Communication Mode</Label>
             <div className="grid grid-cols-2 gap-3">

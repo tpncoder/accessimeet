@@ -19,14 +19,18 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootComponent,
 })
 
+// __root.tsx
 function RootComponent() {
   const { isAuthenticated: initialAuth } = Route.useRouteContext()
   const isLoggedIn = useAuth(initialAuth)
-
+  
   return (
     <>
-      <Navbar isLoggedIn={isLoggedIn} />
-      <Outlet />
+      {/* Changed overflow-y-auto to overflow-hidden */}
+      <div className="w-[125%] h-[125vh] scale-80 transform origin-top-left overflow-hidden">
+        <Navbar isLoggedIn={isLoggedIn} />
+        <Outlet />
+      </div>
     </>
   )
 }

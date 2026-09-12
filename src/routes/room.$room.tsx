@@ -245,15 +245,15 @@ function RoomComponent() {
         </div>
       </div>
 
-      <div className="w-full md:w-[400px] flex flex-col gap-4 sticky top-4 self-start">
+      <div className="w-full md:w-100 flex flex-col gap-4 sticky top-4 self-start">
 
         {displayCaption && (
           <div className="w-full relative">
-            <div className="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-sm overflow-hidden">
+            <div className="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]  overflow-hidden">
               <div className="bg-black text-white px-4 py-2 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className={`
-                    w-2.5 h-2.5 rounded-full
+                    w-2.5 h-2.5 
                     ${displayCaption.includes('signed') ? 'bg-[#00FFCC]' :
                       displayCaption.includes('said') ? 'bg-[#4ECDC4]' : 'bg-[#00FFCC]'}
                     ${!displayCaption.includes('No hand') ? 'animate-pulse' : ''}
@@ -276,7 +276,7 @@ function RoomComponent() {
                 </p>
               </div>
 
-              <div className="h-1.5 bg-gradient-to-r from-[#FF6B6B] via-[#FFE66D] to-[#4ECDC4]" />
+              <div className="h-1.5 bg-linear-to-r from-[#FF6B6B] via-[#FFE66D] to-[#4ECDC4]" />
             </div>
           </div>
         )}
@@ -310,13 +310,13 @@ function RoomComponent() {
               onClick={sendInterrupt}
               className="w-full bg-[#FF6B6B] border-4 border-black px-4 py-3 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 text-white"
             >
-              ✋ Raise Hand
+              Raise Hand
             </button>
           )}
         </div>
 
         {showTranscriptPanel && (
-          <div className="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-sm overflow-hidden flex flex-col max-h-[60vh]">
+          <div className="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]  overflow-hidden flex flex-col max-h-[60vh]">
             <div className="bg-black text-white px-4 py-2 flex items-center justify-between shrink-0">
               <span className="font-bold text-xs uppercase tracking-wider">Transcript</span>
               <span className="text-xs font-mono opacity-75">{transcript.length} entries</span>
@@ -328,7 +328,7 @@ function RoomComponent() {
                 transcript.map((entry, idx) => (
                   <div
                     key={idx}
-                    className={`p-2 border-2 border-black rounded-sm ${entry.speaker === 'local' ? 'bg-[#FFE66D]' : 'bg-[#4ECDC4]'
+                    className={`p-2 border-2 border-black  ${entry.speaker === 'local' ? 'bg-[#FFE66D]' : 'bg-[#4ECDC4]'
                       }`}
                   >
                     <div className="flex items-baseline gap-2 mb-1">

@@ -25,8 +25,7 @@ function Dashboard() {
         const newRoomId = Math.random().toString(36).substring(2, 9)
 
         navigate({
-            to: '/room/$roomId',
-            params: { roomId: newRoomId },
+            to: `/room/${newRoomId}`,
             search: { isHost: true },
         })
     }
@@ -35,14 +34,14 @@ function Dashboard() {
         if (!roomCode.trim()) return
 
         navigate({
-            to: '/room/$roomId',
-            params: { roomId: roomCode.trim() },
+            to: `/room/${roomCode.trim()}`,
             search: { isHost: false },
         })
     }
 
     return (
-        <div className='p-4 flex flex-col items-center gap-6 min-h-full w-screen'>
+        // Changed: min-h-full w-screen -> min-h-screen w-full justify-center
+        <div className='p-4 flex flex-col items-center justify-center min-h-screen w-full gap-6'>
             <Typography type='h2' className='font-thin'>What are we doing today?</Typography>
 
             <div className='flex flex-col md:flex-row gap-4 w-full max-w-3xl'>
@@ -83,7 +82,8 @@ function Landing() {
     const navigate = useNavigate()
 
     return (
-        <div className='p-4 flex flex-col items-center justify-center min-h-full w-screen gap-8 text-center'>
+        // Changed: min-h-full w-screen -> min-h-screen w-full justify-center
+        <div className='p-4 flex flex-col items-center justify-center min-h-screen w-full gap-8 text-center'>
             <div className='flex flex-col gap-2 max-w-2xl'>
                 <Typography type='h1'>ACCESSIMEET</Typography>
                 <Typography type='h4' className='font-thin'>

@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Button, Card, Input, TextField, FieldError, Label, Description } from '@heroui/react'
 import { useState } from 'react'
-
 import { supabase } from '#/utils/supabase'
 
 export const Route = createFileRoute('/auth')({
@@ -10,16 +9,16 @@ export const Route = createFileRoute('/auth')({
 
 function Auth() {
   const navigate = useNavigate()
-
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  
   const isUserNameInvalid = !(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email))
   const isPasswordInvalid = !(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/.test(password))
   const [authError, setAuthError] = useState<string | null>(null)
 
   const authUser = async (email: string, password: string) => {
     setAuthError(null)
-
+    
     const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -59,16 +58,24 @@ function Auth() {
   }
 
   return (
-    <div className="p-4 flex justify-center items-center min-h-full w-screen">
+    <div className="p-4 flex flex-col justify-center items-center min-h-screen w-full gap-6">
       <Card className="max-w-sm w-full brutal-card">
-        <Card.Header className="font-bold text-xl uppercase">Sign In / Sign Up</Card.Header>
+        <Card.Header className="font-bold text-xl uppercase">
+          Sign In / Sign Up
+        </Card.Header>
         <Card.Content className="flex flex-col gap-4">
           {authError && (
             <div className="p-2 border-2 border-black bg-red-100 font-bold text-xs">
               {authError}
             </div>
           )}
-          <TextField isRequired onChange={setEmail} value={email} isInvalid={email.length > 0 && isUserNameInvalid}>
+          
+          <TextField 
+            isRequired 
+            onChange={setEmail} 
+            value={email} 
+            isInvalid={email.length > 0 && isUserNameInvalid}
+          >
             <Label className="font-bold">Email</Label>
             <Input placeholder="Enter your email" />
             {email.length > 0 && isUserNameInvalid ? (
@@ -77,7 +84,13 @@ function Auth() {
               <Description>Enter your email address</Description>
             )}
           </TextField>
-          <TextField isRequired onChange={setPassword} value={password} isInvalid={password.length > 0 && isPasswordInvalid}>
+          
+          <TextField 
+            isRequired 
+            onChange={setPassword} 
+            value={password} 
+            isInvalid={password.length > 0 && isPasswordInvalid}
+          >
             <Label className="font-bold">Password</Label>
             <Input placeholder="Enter your password" type="password" />
             {password.length > 0 && isPasswordInvalid ? (
@@ -88,7 +101,7 @@ function Auth() {
           </TextField>
         </Card.Content>
         <Card.Footer>
-          <Button 
+          <Button
             onPress={() => authUser(email, password)}
             isDisabled={isUserNameInvalid || isPasswordInvalid}
             className="w-full brutal-btn-primary"
